@@ -18,23 +18,44 @@
  * 
 */
 const navBar = document.getElementById('navbar__list');
-let fragment = document.createDocumentFragment();
+const fragment = document.createDocumentFragment();
 const sections = document.querySelectorAll('section');
+
 
 /**
  * End Global Variables*/ 
+
+
 // helper function 
 
-function eventHandler(event){
-    event.preventDefault();
-    for(let section of sections)
-    {
-        section.scrollIntoView({behavior: "smooth"});
-        section.classList.toggle('your-active-class');
-        console.log(section.class);
-    }
+//this function for smooth scrolling 
+function eventHandler(event)
+{
+  event.preventDefault();
+  for(let section of sections)
+    section.scrollIntoView({behavior: "smooth"});
 };
 
+
+// this function for changing the active class status 
+function activeClass(anchor)
+{
+  for(let section of sections) 
+  {
+    const rect = section.getBoundingClientRect();
+    if(rect.top < window.innerHeight)//section is in the view port so it will be active 
+    {
+      section.style.background = "black";
+      anchor.style.background = "white";
+      section.classList.add("your-active-class");
+      anchor.classList.add("active")
+    }
+    anchor.classList.remove("active");
+    section.classList.remove("your-active-class");
+    console.log(navLink.classList.remove("active"));
+    console.log(section.classList.remove("your-active-class"));
+  }
+};
 
  // build the navbar
  
@@ -57,15 +78,13 @@ function creatNav()
   navBar.appendChild(fragment);
   document.body.header.appendChild(navBar);
 
-   // to do the smoothe scrooling 
-   const anchors = document.getElementsByTagName('a');
-   for(a of anchors){
-        anchors[a].addEventListener('click', eventHandler(event));
-        anchors[a].class.classList.toggle('active');
-        console.log(anchors[a].class);
-   }
-
-
+  // to do the smoothe scrooling 
+  const anchors = document.getElementsByTagName('a');
+  for(a of anchors)
+  {
+    anchors[a].addEventListener('click', eventHandler(event)); 
+    window.addEventListener("scroll", activeClass(anchors[a])); // to change the active class status 
+  }
 };
 
 //Intializing the function 
