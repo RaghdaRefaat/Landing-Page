@@ -17,10 +17,12 @@
  * Define Global Variables
  * 
 */
-const navBar = document.getElementById('navbar__list');
+const bodyHeader = document.querySelector('.page__header');
+const navBarMenu = document.querySelector('.navbar__menu');
+const navBar = document.querySelector('#navbar__list');
 const fragment = document.createDocumentFragment();
 const sections = document.querySelectorAll('section');
-
+let anchors ;
 
 /**
  * End Global Variables*/ 
@@ -28,66 +30,92 @@ const sections = document.querySelectorAll('section');
 
 // helper function 
 
-//this function for smooth scrolling 
-function eventHandler(event)
+//this function to check the section in the view port 
+function sectionInView (section)
 {
-  event.preventDefault();
-  for(let section of sections)
-    section.scrollIntoView({behavior: "smooth"});
+  const rect = section.getBoundingClientRect();
+  return(
+    rect.top <= 150 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+  && rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
 };
 
-
-// this function for changing the active class status 
-function activeClass(anchor)
+function activeClass()
 {
   for(let section of sections) 
   {
-    const rect = section.getBoundingClientRect();
-    if(rect.top < window.innerHeight)//section is in the view port so it will be active 
-    {
-      section.style.background = "black";
-      anchor.style.background = "white";
-      section.classList.add("your-active-class");
-      anchor.classList.add("active")
+    if(section.id == 'section1')
+      section.classList.remove('your-active-class'); //to remove the default setting 
+    const isInView = sectionInView(section);
+    if (isInView){
+      section.classList.add('your-active-class');
+      section.style.background = "green";
+      for(anchor of anchors){
+        if(anchor.getAttribute('text') == section.id){
+          anchor.classList.add('active');
+          anchor.style.background = "green";
+        }
+        else{
+          anchor.classList.remove('active');
+          anchor.removeAttribute('style');
+        }
+      }
+      
+    }else {
+      section.classList.remove('your-active-class');
+      section.removeAttribute('style');
     }
-    anchor.classList.remove("active");
-    section.classList.remove("your-active-class");
-    console.log(navLink.classList.remove("active"));
-    console.log(section.classList.remove("your-active-class"));
   }
 };
+
+
+function smoothy()
+{
+  // to do the smooth scrooling
+  anchors = document.querySelectorAll('a');
+  for(anchor of anchors)
+  {
+    anchor.addEventListener('click', function eventHandler()
+    { 
+      this.scrollIntoView({behavior: "smooth" , block: "start"});
+      window.addEventListener('scroll', activeClass);
+    }) 
+  }
+};
+
+
+
+
+// this function for changing the active class status 
+
+
 
  // build the navbar
  
 function creatNav()
 {
-  let firstLink = true ; // this boolean var to add the active check class 
   for(let section of sections)
   {
     const item = document.createElement('li');
-    if(firstLink == true)
-    {
-      item.innerHTML = `<a href="#${section.id}" class="active" data-link= ${section.dataset.nav}>${section.id}</a>` ;
-      firstLink = false;
-    }
-    else
-      item.innerHTML = `<a href="#${section.id}" class="active" data-link= ${section.dataset.nav}>${section.id}</a>` ;
+    item.innerHTML = `<a id=${section.id} href="#${section.id}" class="" data-link= ${section.dataset.nav}>${section.id}</a>` ;
     item.style.cssText = 'padding-left:2em ; padding-right:2em ; font-size:30px ; font-color:white';
     fragment.appendChild(item);
   }
   navBar.appendChild(fragment);
-  document.body.header.appendChild(navBar);
-
-  // to do the smoothe scrooling 
-  const anchors = document.getElementsByTagName('a');
-  for(a of anchors)
-  {
-    anchors[a].addEventListener('click', eventHandler(event)); 
-    window.addEventListener("scroll", activeClass(anchors[a])); // to change the active class status 
-  }
+  navBarMenu.appendChild(navBar);
+  bodyHeader.appendChild(navBarMenu);
+  document.body.appendChild(bodyHeader); 
+  smoothy();
 };
+
+
 
 //Intializing the function 
 creatNav();
+
+
+
+
+
 
 
