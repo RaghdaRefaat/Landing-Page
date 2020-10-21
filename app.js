@@ -40,6 +40,8 @@ function sectionInView (section)
   );
 };
 
+
+// this function for changing the active class status 
 function activeClass()
 {
   for(let section of sections) 
@@ -68,17 +70,21 @@ function activeClass()
   }
 };
 
-
+// to do the smooth scrooling
 function smoothy()
 {
-  // to do the smooth scrooling
   anchors = document.querySelectorAll('a');
   for(anchor of anchors)
   {
-    anchor.addEventListener('click', function eventHandler()
+    anchor.addEventListener('click', function eventHandler(event)
     { 
-      this.scrollIntoView({behavior: "smooth" , block: "start"});
-      window.addEventListener('scroll', activeClass);
+      event.preventDefault();
+      for(let section of sections){
+        if(section.id == this.id){
+          section.scrollIntoView({behavior: "smooth" , block: "start"});
+          window.addEventListener('scroll', activeClass);
+        }
+      }
     }) 
   }
 };
@@ -86,7 +92,7 @@ function smoothy()
 
 
 
-// this function for changing the active class status 
+
 
 
 
@@ -105,6 +111,8 @@ function creatNav()
   navBarMenu.appendChild(navBar);
   bodyHeader.appendChild(navBarMenu);
   document.body.appendChild(bodyHeader); 
+
+  //to do smooth scrolling 
   smoothy();
 };
 
