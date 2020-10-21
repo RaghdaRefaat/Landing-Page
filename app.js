@@ -51,7 +51,7 @@ function activeClass()
       section.classList.add('your-active-class');
       section.style.background = "green";
       for(anchor of anchors){
-        if(anchor.getAttribute('text') == section.id){
+        if(anchor.getAttribute('data-link') == section.id){
           anchor.classList.add('active');
           anchor.style.background = "green";
         }
@@ -97,7 +97,7 @@ function creatNav()
   for(let section of sections)
   {
     const item = document.createElement('li');
-    item.innerHTML = `<a id=${section.id} href="#${section.id}" class="" data-link= ${section.dataset.nav}>${section.id}</a>` ;
+    item.innerHTML = `<a id=${section.id} href="#${section.id}" class="" data-link= ${section.id}>${section.id}</a>` ;
     item.style.cssText = 'padding-left:2em ; padding-right:2em ; font-size:30px ; font-color:white';
     fragment.appendChild(item);
   }
